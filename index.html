@@ -24,6 +24,17 @@
   body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,Segoe UI,Roboto,Arial,sans-serif;position:relative}
   /* soft scanline effect to echo the logo */
   body::before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient( to bottom, rgba(16,229,128,0.05), rgba(16,229,128,0.05) 1px, transparent 2px, transparent 3px)}
+  body.splash-active header,
+  body.splash-active main{display:none}
+  #splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,12,8,0.92);backdrop-filter:blur(6px);z-index:1000;padding:24px}
+  #splash.hidden{display:none}
+  .splash-card{max-width:420px;width:100%;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:32px 28px;box-shadow:0 0 30px rgba(16,229,128,.18);text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+  .splash-logo{height:96px;width:auto;filter:drop-shadow(0 0 12px rgba(16,229,128,.45));border-radius:10px}
+  .splash-title{font-size:26px;margin:0;color:var(--fg)}
+  .splash-copy{margin:0;color:var(--muted);font-size:15px}
+  .splash-button{background:var(--accent);color:#041109;font-weight:600;padding:12px 24px;border-radius:999px;border:none;cursor:pointer;font-size:16px;box-shadow:0 0 12px rgba(16,229,128,.35)}
+  .splash-button:hover{background:var(--accent-2)}
+
 
   header{max-width:1000px;margin:32px auto 8px;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
   .brand{display:flex;align-items:center;gap:12px}
@@ -65,7 +76,16 @@
   .ok{color:#8be28b} .fail{color:#ff8686}
 </style>
 </head>
-<body>
+<body class="splash-active">
+  <div id="splash">
+    <div class="splash-card">
+      <img class="splash-logo" src="data:image/webp;base64,UklGRlRsAABXRUJQVlA4IEhsAABQZwGdASoAAgACPjEYikOiIaEiJBIJcEAGCWVsrPheP+rC9/D5reFXorgZ/2dqbnv/o9Q36" alt="Words Generator logo" />
+      <h2 class="splash-title">WordGen</h2>
+      <p class="splash-copy">Generate business and personal transfer phrases with a retro CRT vibe.</p>
+      <button id="enterApp" class="splash-button">Enter</button>
+    </div>
+  </div>
+
   <header>
     <div class="brand">
       <img class="logo" src="data:image/webp;base64,UklGRlRsAABXRUJQVlA4IEhsAABQZwGdASoAAgACPjEYikOiIaEiJBIJcEAGCWVsrPheP+rC9/D5reFXorgZ/2dqbnv/o9Q36" alt="Words Generator logo" onerror="this.onerror=null; this.remove();" />
@@ -85,6 +105,16 @@
   </main>
 
 <script type="module">
+
+  const splash = document.getElementById('splash');
+  const enterAppBtn = document.getElementById('enterApp');
+  if(enterAppBtn && splash){
+    enterAppBtn.addEventListener('click', ()=>{
+      document.body.classList.remove('splash-active');
+      splash.classList.add('hidden');
+    });
+  }
+
   // ────────────────────────────────────────────────────────────
   // Generic outgoing words (apply to all business types)
   const GENERIC_OUT = [
