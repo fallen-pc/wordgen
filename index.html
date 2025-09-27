@@ -29,7 +29,7 @@
   #splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,12,8,0.92);backdrop-filter:blur(6px);z-index:1000;padding:24px}
   #splash.hidden{display:none}
   .splash-card{max-width:420px;width:100%;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:32px 28px;box-shadow:0 0 30px rgba(16,229,128,.18);text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
-  .splash-logo, .logo{display:block;width:auto;max-width:100%}
+  .splash-logo, .logo{display:block;height:auto}
   .splash-logo{width:120px;filter:drop-shadow(0 0 12px rgba(16,229,128,.45));}
   .splash-title{font-size:26px;margin:0;color:var(--fg)}
   .splash-copy{margin:0;color:var(--muted);font-size:15px}
@@ -78,27 +78,9 @@
 </style>
 </head>
 <body class="splash-active">
-  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <symbol id="wordgen-logo" viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <radialGradient id="logoGlow" cx="50%" cy="45%" r="70%">
-          <stop offset="0%" stop-color="#0bd173" stop-opacity="0.25" />
-          <stop offset="60%" stop-color="#10e580" stop-opacity="0.15" />
-          <stop offset="100%" stop-color="#041109" stop-opacity="0.05" />
-        </radialGradient>
-      </defs>
-      <rect x="4" y="4" width="112" height="112" rx="20" fill="#07140f" stroke="#10e580" stroke-width="4" />
-      <rect x="14" y="14" width="92" height="92" rx="18" fill="url(#logoGlow)" stroke="#0bd173" stroke-width="1.5" />
-      <path d="M26 32 L38 90 L58 56 L70 80 L82 56 L94 90 L106 32 L94 32 L85 72 L72 48 L58 72 L50 32 Z" fill="#10e580" />
-      <path d="M60 38c-18 0-32 12-32 28s13.5 28 31.5 28c11.3 0 21.5-5.4 26-13.6h-14.3c-3.6 3.7-8.1 5.6-12.6 5.6-10.6 0-18.3-7-18.3-20s7.7-20 18.9-20c8.7 0 14.9 4.2 16.8 12.6H58.3v11.4H93c0.4-2 0.6-4.2 0.6-6.4 0-16.6-13-25.6-33.6-25.6z" fill="#041109" opacity="0.85" />
-      <circle cx="60" cy="60" r="48" fill="none" stroke="#10e580" stroke-width="2" stroke-dasharray="4 8" stroke-linecap="round" opacity="0.35" />
-    </symbol>
-  </svg>
   <div id="splash">
     <div class="splash-card">
-      <svg class="splash-logo" role="img" aria-label="WordGen logo">
-        <use href="#wordgen-logo" xlink:href="#wordgen-logo"></use>
-      </svg>
+      <img class="splash-logo" src="logo.svg" alt="WordGen logo" />
       <h2 class="splash-title">WordGen</h2>
       <p class="splash-copy">Generate business and personal transfer phrases with a retro CRT vibe.</p>
       <button id="enterApp" class="splash-button">Enter</button>
@@ -107,9 +89,7 @@
 
   <header>
     <div class="brand">
-      <svg class="logo" role="img" aria-label="WordGen logo">
-        <use href="#wordgen-logo" xlink:href="#wordgen-logo"></use>
-      </svg>
+      <img class="logo" src="logo.svg" alt="WordGen logo" />
       <h1>Business / Personal Transfer Word Generators</h1>
     </div>
     <div class="muted">Pick Business or Personal per box. Business shows Incoming and Outgoing. Personal is under construction.</div>

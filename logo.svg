@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <radialGradient id="logoGlow" cx="50%" cy="45%" r="70%">
+      <stop offset="0%" stop-color="#0bd173" stop-opacity="0.25" />
+      <stop offset="60%" stop-color="#10e580" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#041109" stop-opacity="0.05" />
+    </radialGradient>
+  </defs>
+  <rect x="4" y="4" width="112" height="112" rx="20" fill="#07140f" stroke="#10e580" stroke-width="4" />
+  <rect x="14" y="14" width="92" height="92" rx="18" fill="url(#logoGlow)" stroke="#0bd173" stroke-width="1.5" />
+  <path d="M26 32 L38 90 L58 56 L70 80 L82 56 L94 90 L106 32 L94 32 L85 72 L72 48 L58 72 L50 32 Z" fill="#10e580" />
+  <path d="M60 38c-18 0-32 12-32 28s13.5 28 31.5 28c11.3 0 21.5-5.4 26-13.6h-14.3c-3.6 3.7-8.1 5.6-12.6 5.6-10.6 0-18.3-7-18.3-20s7.7-20 18.9-20c8.7 0 14.9 4.2 16.8 12.6H58.3v11.4H93c0.4-2 0.6-4.2 0.6-6.4 0-16.6-13-25.6-33.6-25.6z" fill="#041109" opacity="0.85" />
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#10e580" stroke-width="2" stroke-dasharray="4 8" stroke-linecap="round" opacity="0.35" />
+</svg>
