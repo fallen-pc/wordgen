@@ -6,9 +6,9 @@
 <title>Business/Personal Transfer Word Generators</title>
 <meta name="theme-color" content="#10e580" />
 <style>
-  /* CRT‑green theme to match the provided logo */
+  /* CRT-green theme to match the provided logo */
   :root{
-    --bg:#050c08;           /* near‑black */
+    --bg:#050c08;           /* near-black */
     --card:#0a1410;         /* dark panel */
     --muted:#7aa690;        /* desaturated green */
     --border:#133326;       /* deep green border */
@@ -24,22 +24,10 @@
   body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,Segoe UI,Roboto,Arial,sans-serif;position:relative}
   /* soft scanline effect to echo the logo */
   body::before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient( to bottom, rgba(16,229,128,0.05), rgba(16,229,128,0.05) 1px, transparent 2px, transparent 3px)}
-  body.splash-active header,
-  body.splash-active main{display:none}
-  #splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,12,8,0.92);backdrop-filter:blur(6px);z-index:1000;padding:24px}
-  #splash.hidden{display:none}
-  .splash-card{max-width:420px;width:100%;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:32px 28px;box-shadow:0 0 30px rgba(16,229,128,.18);text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
-  .splash-logo, .logo{display:block;width:auto;max-width:100%}
-  .splash-logo{width:120px;filter:drop-shadow(0 0 12px rgba(16,229,128,.45));}
-  .splash-title{font-size:26px;margin:0;color:var(--fg)}
-  .splash-copy{margin:0;color:var(--muted);font-size:15px}
-  .splash-button{background:var(--accent);color:#041109;font-weight:600;padding:12px 24px;border-radius:999px;border:none;cursor:pointer;font-size:16px;box-shadow:0 0 12px rgba(16,229,128,.35)}
-  .splash-button:hover{background:var(--accent-2)}
-
 
   header{max-width:1000px;margin:32px auto 8px;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
   .brand{display:flex;align-items:center;gap:12px}
-  .logo{width:60px;filter:drop-shadow(0 0 8px rgba(16,229,128,.35));}
+  .logo{height:48px;width:auto;filter:drop-shadow(0 0 8px rgba(16,229,128,.35));border-radius:6px}
   h1{font-size:22px;margin:0}
   .muted{color:var(--muted)}
 
@@ -77,39 +65,10 @@
   .ok{color:#8be28b} .fail{color:#ff8686}
 </style>
 </head>
-<body class="splash-active">
-  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <symbol id="wordgen-logo" viewBox="0 0 120 120" preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <radialGradient id="logoGlow" cx="50%" cy="45%" r="70%">
-          <stop offset="0%" stop-color="#0bd173" stop-opacity="0.25" />
-          <stop offset="60%" stop-color="#10e580" stop-opacity="0.15" />
-          <stop offset="100%" stop-color="#041109" stop-opacity="0.05" />
-        </radialGradient>
-      </defs>
-      <rect x="4" y="4" width="112" height="112" rx="20" fill="#07140f" stroke="#10e580" stroke-width="4" />
-      <rect x="14" y="14" width="92" height="92" rx="18" fill="url(#logoGlow)" stroke="#0bd173" stroke-width="1.5" />
-      <path d="M26 32 L38 90 L58 56 L70 80 L82 56 L94 90 L106 32 L94 32 L85 72 L72 48 L58 72 L50 32 Z" fill="#10e580" />
-      <path d="M60 38c-18 0-32 12-32 28s13.5 28 31.5 28c11.3 0 21.5-5.4 26-13.6h-14.3c-3.6 3.7-8.1 5.6-12.6 5.6-10.6 0-18.3-7-18.3-20s7.7-20 18.9-20c8.7 0 14.9 4.2 16.8 12.6H58.3v11.4H93c0.4-2 0.6-4.2 0.6-6.4 0-16.6-13-25.6-33.6-25.6z" fill="#041109" opacity="0.85" />
-      <circle cx="60" cy="60" r="48" fill="none" stroke="#10e580" stroke-width="2" stroke-dasharray="4 8" stroke-linecap="round" opacity="0.35" />
-    </symbol>
-  </svg>
-  <div id="splash">
-    <div class="splash-card">
-      <svg class="splash-logo" role="img" aria-label="WordGen logo">
-        <use href="#wordgen-logo" xlink:href="#wordgen-logo"></use>
-      </svg>
-      <h2 class="splash-title">WordGen</h2>
-      <p class="splash-copy">Generate business and personal transfer phrases with a retro CRT vibe.</p>
-      <button id="enterApp" class="splash-button">Enter</button>
-    </div>
-  </div>
-
+<body>
   <header>
     <div class="brand">
-      <svg class="logo" role="img" aria-label="WordGen logo">
-        <use href="#wordgen-logo" xlink:href="#wordgen-logo"></use>
-      </svg>
+      <img class="logo" src="data:image/webp;base64,UklGRlRsAABXRUJQVlA4IEhsAABQZwGdASoAAgACPjEYikOiIaEiJBIJcEAGCWVsrPheP+rC9/D5reFXorgZ/2dqbnv/o9Q36" alt="Words Generator logo" onerror="this.onerror=null; this.remove();" />
       <h1>Business / Personal Transfer Word Generators</h1>
     </div>
     <div class="muted">Pick Business or Personal per box. Business shows Incoming and Outgoing. Personal is under construction.</div>
@@ -126,17 +85,7 @@
   </main>
 
 <script type="module">
-
-  const splash = document.getElementById('splash');
-  const enterAppBtn = document.getElementById('enterApp');
-  if(enterAppBtn && splash){
-    enterAppBtn.addEventListener('click', ()=>{
-      document.body.classList.remove('splash-active');
-      splash.classList.add('hidden');
-    });
-  }
-
-  // ────────────────────────────────────────────────────────────
+  // ------------------------------------------------------------
   // Generic outgoing words (apply to all business types)
   const GENERIC_OUT = [
     'Payment','Transfer','Payout','Settlement','Remittance','Subscription','Fees','Service','Supplies','Utilities','Parking','Insurance','Freight','Commission','Royalty','Rent','Lease','Adjustment','Reversal','Surcharge'
@@ -184,7 +133,7 @@
     'General','E-commerce','Consulting','Construction','Logistics','Manufacturing','Healthcare','Education','Hospitality','Real Estate','Automotive','Utilities','Telecom','SaaS','Fintech','Non-profit','Government','Marketplace','Professional Services','Retail','Wholesale'
   ];
 
-  // ────────────────────────────────────────────────────────────
+  // ------------------------------------------------------------
   // Storage
   const KEY = 'btw_generators_v4';
   const read  = () => JSON.parse(localStorage.getItem(KEY) || '[]');
@@ -208,7 +157,7 @@
   function render(){
     grid.innerHTML='';
     gens.forEach(g => grid.appendChild(card(g)));
-    stats.textContent = `${gens.length} boxes • generic words ${GENERIC_OUT.length}`;
+    stats.textContent = `${gens.length} boxes � generic words ${GENERIC_OUT.length}`;
   }
 
   function card(g){
@@ -218,7 +167,7 @@
 
     // close (X)
     const close = document.createElement('button');
-    close.className='close'; close.setAttribute('aria-label','Close'); close.textContent='×';
+    close.className='close'; close.setAttribute('aria-label','Close'); close.textContent='�';
     close.onclick = (ev)=>{ ev.preventDefault(); if(confirm('Remove this box?')) removeGen(g.id); };
 
     // badge
@@ -259,7 +208,7 @@
     el = el || document.createElement('div');
     el.className='card';
     el.dataset.id = g.id;
-    close = close || (()=>{ const b=document.createElement('button'); b.className='close'; b.textContent='×'; b.onclick=(ev)=>{ ev.preventDefault(); if(!confirm('Remove this box?')){ ev.stopPropagation(); return; } removeGen(g.id); }; return b; })();
+    close = close || (()=>{ const b=document.createElement('button'); b.className='close'; b.textContent='�'; b.onclick=(ev)=>{ ev.preventDefault(); if(!confirm('Remove this box?')){ ev.stopPropagation(); return; } removeGen(g.id); }; return b; })();
     badge = badge || (()=>{ const d=document.createElement('div'); d.className='badge personal'; d.textContent='PERSONAL'; return d; })();
 
     const nameRow = document.createElement('div'); nameRow.className='row';
@@ -267,7 +216,7 @@
     name.oninput = (e)=>{ g.name = e.target.value; write(gens); };
 
     const ph = document.createElement('div'); ph.className='placeholder';
-    const uc = document.createElement('div'); uc.className='uc'; uc.textContent='Personal mode — under construction';
+    const uc = document.createElement('div'); uc.className='uc'; uc.textContent='Personal mode � under construction';
     ph.append(uc);
 
     nameRow.append(name);
@@ -279,7 +228,7 @@
     el = el || document.createElement('div');
     el.className='card';
     el.dataset.id = g.id;
-    close = close || (()=>{ const b=document.createElement('button'); b.className='close'; b.textContent='×'; b.onclick=(ev)=>{ ev.preventDefault(); if(!confirm('Remove this box?')){ ev.stopPropagation(); return; } removeGen(g.id); }; return b; })();
+    close = close || (()=>{ const b=document.createElement('button'); b.className='close'; b.textContent='�'; b.onclick=(ev)=>{ ev.preventDefault(); if(!confirm('Remove this box?')){ ev.stopPropagation(); return; } removeGen(g.id); }; return b; })();
     badge = badge || (()=>{ const d=document.createElement('div'); d.className='badge business'; d.textContent='BUSINESS'; return d; })();
 
     // seed invoice if missing (no write here to avoid re-render loops)
@@ -302,7 +251,7 @@
     const outTitle = document.createElement('h4'); outTitle.textContent='Outgoing';
     const outTag = document.createElement('span'); outTag.className='tag'; outTag.textContent=`${getOutWordList(g.bizType).length} words`;
     outHeader.append(outTitle,outTag);
-    const outWord = document.createElement('div'); outWord.className='word'; outWord.textContent=g.lastOut||'—';
+    const outWord = document.createElement('div'); outWord.className='word'; outWord.textContent=g.lastOut||'�';
     const outCtrls = document.createElement('div'); outCtrls.className='controls';
     const outGen = button('Generate', ()=>{ const list=getOutWordList(g.bizType); setOut(g, outWord, pick(list)); });
     const outCopy = smallButton('Copy', async()=> copyText(g.lastOut, outCopy));
@@ -314,9 +263,9 @@
     const inHeader = document.createElement('div'); inHeader.className='row';
     const inTitle = document.createElement('h4'); inTitle.textContent='Incoming (Invoice #)';
     const inFmt = getFmtById(g.inv.fmtId);
-    const inTag = document.createElement('span'); inTag.className='tag'; inTag.textContent=inFmt.pattern.replace('{num}','…');
+    const inTag = document.createElement('span'); inTag.className='tag'; inTag.textContent=inFmt.pattern.replace('{num}','�');
     inHeader.append(inTitle,inTag);
-    const inWord = document.createElement('div'); inWord.className='word'; inWord.textContent=g.lastIn||'—';
+    const inWord = document.createElement('div'); inWord.className='word'; inWord.textContent=g.lastIn||'�';
     const inCtrls = document.createElement('div'); inCtrls.className='controls';
     const inGen = button('Generate', ()=>{ generateInvoice(g, inWord); });
     const inCopy = smallButton('Copy', async()=> copyText(g.lastIn, inCopy));
@@ -377,7 +326,7 @@
     if(id && confirm('Remove this box?')) removeGen(id);
   });
 
-  // ────────────────────────────────────────────────────────────
+  // ------------------------------------------------------------
   // Tests
   document.getElementById('runTests').onclick = runTests;
   const testOut = document.getElementById('testout');
@@ -385,8 +334,8 @@
 
   function runTests(){
     const lines = [];
-    const pass = (m)=>lines.push(`✔ ${m}`);
-    const fail = (m,e)=>lines.push(`✘ ${m}: ${e.message}`);
+    const pass = (m)=>lines.push(`? ${m}`);
+    const fail = (m,e)=>lines.push(`? ${m}: ${e.message}`);
     const tryTest = (name, fn)=>{ try{ fn(); pass(name); } catch(e){ fail(name,e); } };
 
     tryTest('new box starts in select mode', ()=>{ const g = newGen(); assert(g.mode===null, 'mode should start null'); });
@@ -403,7 +352,7 @@
 
     testOut.textContent = lines.join('\n');
     testOut.style.display = 'block';
-    testOut.className = lines.some(l=>l.startsWith('✘')) ? 'fail' : 'ok';
+    testOut.className = lines.some(l=>l.startsWith('?')) ? 'fail' : 'ok';
   }
 
   // Bootstrap
@@ -412,3 +361,4 @@
 </script>
 </body>
 </html>
+
