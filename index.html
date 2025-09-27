@@ -208,7 +208,7 @@
     el = el || document.createElement('div');
     el.className='card';
     el.dataset.id = g.id;
-    close = close || (()=>{ const b=document.createElement('button'); b.className='close'; b.textContent='×'; b.onclick=(ev)=>{ ev.preventDefault(); if(confirm('Remove this box?')) removeGen(g.id); }; return b; })();
+    close = close || (()=>{ const b=document.createElement('button'); b.className='close'; b.textContent='×'; b.onclick=(ev)=>{ ev.preventDefault(); if(!confirm('Remove this box?')){ ev.stopPropagation(); return; } removeGen(g.id); }; return b; })();
     badge = badge || (()=>{ const d=document.createElement('div'); d.className='badge personal'; d.textContent='PERSONAL'; return d; })();
 
     const nameRow = document.createElement('div'); nameRow.className='row';
@@ -228,7 +228,7 @@
     el = el || document.createElement('div');
     el.className='card';
     el.dataset.id = g.id;
-    close = close || (()=>{ const b=document.createElement('button'); b.className='close'; b.textContent='×'; b.onclick=(ev)=>{ ev.preventDefault(); if(confirm('Remove this box?')) removeGen(g.id); }; return b; })();
+    close = close || (()=>{ const b=document.createElement('button'); b.className='close'; b.textContent='×'; b.onclick=(ev)=>{ ev.preventDefault(); if(!confirm('Remove this box?')){ ev.stopPropagation(); return; } removeGen(g.id); }; return b; })();
     badge = badge || (()=>{ const d=document.createElement('div'); d.className='badge business'; d.textContent='BUSINESS'; return d; })();
 
     // seed invoice if missing (no write here to avoid re-render loops)
