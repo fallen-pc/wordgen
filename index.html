@@ -44,7 +44,7 @@
 
   header{max-width:1000px;margin:32px auto 8px;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
   .brand{display:flex;align-items:center;gap:12px}
-  .logo{width:80px;animation:logoPulse 6s ease-in-out infinite;transform-origin:center;filter:drop-shadow(0 0 8px rgba(16,229,128,.35));}
+  .logo{width:120px;animation:logoPulse 6s ease-in-out infinite;transform-origin:center;filter:drop-shadow(0 0 8px rgba(16,229,128,.35));}
   h1{font-size:22px;margin:0}
   .muted{color:var(--muted)}
 
@@ -124,32 +124,38 @@
   // ────────────────────────────────────────────────────────────
   // Generic outgoing words (apply to all business types)
   const GENERIC_OUT = [
-    'Payment','Transfer','Payout','Settlement','Remittance','Subscription','Fees','Service','Supplies','Utilities','Parking','Insurance','Freight','Commission','Royalty','Rent','Lease','Adjustment','Reversal','Surcharge'
+    'Payment','Transfer','Expenses','Fees','Supplies','Equipment','Subscription','Rent','Insurance','Reference No. XXXX','reference no XXXX','Ref XXXX','Reference number XXXX','Payment reference XXXX'
   ];
 
   // Business-specific outgoing words
   const OUT_WORDS_BY_BUSINESS = {
-    'General': [],
-    'E-commerce': ['Fulfilment','Shipping','Packaging','Merchant fees','Platform fees','Ad spend','Chargeback','Returns'],
-    'Consulting': ['Retainer','Billable hours','Advisory','Workshop','Travel'],
-    'Construction': ['Concrete services','Rebar','Aggregate','Formwork','Plant hire','Excavation','Scaffolding','Skip bin','Site prep'],
-    'Logistics': ['Linehaul','Depot','Last-mile','Fleet hire','Toll','Fuel surcharge'],
-    'Manufacturing': ['Raw materials','Tooling','Fabrication','Assembly','Quality control','Machining'],
-    'Healthcare': ['Clinical supplies','Pathology','Radiology','Theatre hire','Consumables'],
-    'Education': ['Tuition','Course materials','Exam fees','Library'],
-    'Hospitality': ['Catering','Venue hire','POS fees','Food','Beverage','Delivery'],
-    'Real Estate': ['Strata fees','Rates','Maintenance','Cleaning','Security'],
-    'Automotive': ['Servicing','Parts','Tyres','Registration','Detailing','Tolls'],
-    'Utilities': ['Network charges','Metering','Supply charges'],
-    'Telecom': ['Bandwidth','Colocation','SLA','Port fees'],
-    'SaaS': ['Subscription','Seats','Overage','API usage'],
-    'Fintech': ['Interchange','Settlement fees','Gateway'],
-    'Non-profit': ['Grant disbursement','Program costs'],
-    'Government': ['Permit fees','Licence','Levy'],
-    'Marketplace': ['Payout','Seller fees','Listing fees'],
-    'Professional Services': ['Engagement','Retainer','Filing fees'],
-    'Retail': ['Inventory','POS fees','Merchandising'],
-    'Wholesale': ['Bulk order','Rebate','Distribution']
+    'General': ['Stationery','Software','Travel','Fuel','Advertising'],
+    'Sex Worker': ['Private booking','Escort service','Club fees','Condoms','Lingerie','Room hire','Security','Advertising'],
+    'Landscaper': ['Lawn care','Mulch','Planting','Hedge trimming','Green waste disposal','Garden supplies','Equipment hire'],
+    'Cleaner': ['Cleaning supplies','Detergents','Disinfectant','Window cleaning','Bond clean','Consumables','Laundry service'],
+    'Hairdresser': ['Salon rent','Hair colour stock','Shampoo','Styling tools','Foils','Product restock','Appointment software'],
+    'Massage Therapist': ['Massage oil','Table maintenance','Laundry service','Clinic rent','Professional indemnity','CPD training'],
+    'Dog Walker': ['Leads and harnesses','Treats','Dog transport','Pet insurance','Dog park fees','Marketing flyers'],
+    'Personal Trainer': ['Gym rent','Equipment purchase','Nutrition plans','Fitness software','Travel to client','Marketing'],
+    'Freelance Photographer': ['Camera gear','Lens hire','Editing software','Studio hire','Printing','Travel shoot'],
+    'Tutor': ['Learning materials','Printing notes','Online platform fees','Whiteboard supplies','Travel to student','Exam prep guides']
+  };
+
+  const GENERIC_INCOMING_TEMPLATES = [
+    'Invoice {num}','Invoice no. {num}','Inv {num}','Invoice {num} paid in full','Payment made for inv {num}','PAYMENT INV {num}','Payment received inv {num}','Payment received for invoice {num}','Payment made for invoice {num}','Payment received - inv {num}'
+  ];
+
+  const INCOMING_TEMPLATES_BY_BUSINESS = {
+    'General': ['Service payment for invoice {num}','Invoice {num} processed'],
+    'Sex Worker': ['Session invoice {num} settled','Private booking payment inv {num}','Deposit received inv {num}'],
+    'Landscaper': ['Garden service inv {num} paid','Lawn maintenance invoice {num} settled','Horticulture invoice {num} processed'],
+    'Cleaner': ['Cleaning service inv {num} paid','End of lease invoice {num} settled','Domestic clean inv {num} processed'],
+    'Hairdresser': ['Salon service invoice {num} settled','Colour package inv {num} paid','Hair appointment inv {num} processed'],
+    'Massage Therapist': ['Treatment invoice {num} paid','Wellness session inv {num} settled','Clinic payment inv {num} processed'],
+    'Dog Walker': ['Walk package inv {num} paid','Pet care invoice {num} settled','Canine service inv {num} processed'],
+    'Personal Trainer': ['Training session inv {num} paid','Fitness program invoice {num} settled','Coaching inv {num} processed'],
+    'Freelance Photographer': ['Shoot invoice {num} paid','Photo package inv {num} settled','Editing invoice {num} processed'],
+    'Tutor': ['Lesson invoice {num} paid','Tutoring inv {num} settled','Session invoice {num} processed']
   };
 
   // Incoming uses auto-numbered invoice formats
@@ -166,7 +172,7 @@
 
   // Business types for dropdown
   const BUSINESS_TYPES = [
-    'General','E-commerce','Consulting','Construction','Logistics','Manufacturing','Healthcare','Education','Hospitality','Real Estate','Automotive','Utilities','Telecom','SaaS','Fintech','Non-profit','Government','Marketplace','Professional Services','Retail','Wholesale'
+    'General','Sex Worker','Landscaper','Cleaner','Hairdresser','Massage Therapist','Dog Walker','Personal Trainer','Freelance Photographer','Tutor'
   ];
 
   // ────────────────────────────────────────────────────────────
@@ -184,7 +190,69 @@
   const safeUUID = () => (window.crypto && crypto.randomUUID ? crypto.randomUUID() : ('g-'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)));
   const uniq = (arr) => [...new Set(arr)];
   const pick = (list) => list[Math.floor(Math.random()*list.length)];
+  const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const randomDigits = (len=4) => Array.from({length:len}, () => Math.floor(Math.random()*10)).join('');
+  const applyOutgoingTemplate = (word) => word ? word.replace(/[xX]{3,}/g, () => randomDigits(randomInt(4,8))) : word;
   const getOutWordList = (bizType) => uniq([ ...GENERIC_OUT, ...((OUT_WORDS_BY_BUSINESS[bizType])||[]) ]);
+  const getIncomingTemplateList = (bizType) => uniq([ ...GENERIC_INCOMING_TEMPLATES, ...((INCOMING_TEMPLATES_BY_BUSINESS[bizType])||[]) ]);
+
+  function ensureInvoiceState(g){
+    if(!g.inv || typeof g.inv !== 'object'){
+      const fmt = pick(INVOICE_FORMATS);
+      const start = startNumber(fmt);
+      g.inv = { fmtId: fmt.id, width: typeof fmt.width === 'number' ? fmt.width : 0, next: start, pending: [], skipCountdown: randomInt(5,10) };
+      return;
+    }
+    const inv = g.inv;
+    if(!inv.fmtId){
+      const fmt = pick(INVOICE_FORMATS);
+      inv.fmtId = fmt.id;
+      if(typeof inv.width !== 'number') inv.width = typeof fmt.width === 'number' ? fmt.width : 0;
+      if(typeof inv.next !== 'number' || !Number.isFinite(inv.next)) inv.next = startNumber(fmt);
+    }
+    if(typeof inv.width !== 'number'){
+      const fmt = getFmtById(inv.fmtId);
+      inv.width = fmt ? fmt.width : 0;
+    }
+    if(typeof inv.next !== 'number' || !Number.isFinite(inv.next)){
+      const fmt = getFmtById(inv.fmtId);
+      inv.next = startNumber(fmt);
+    }
+    inv.next = Math.max(1, Math.round(inv.next));
+    if(!Array.isArray(inv.pending)){
+      inv.pending = [];
+    }
+    if(typeof inv.skipCountdown !== 'number' || inv.skipCountdown < 1 || !Number.isFinite(inv.skipCountdown)){
+      inv.skipCountdown = randomInt(5,10);
+    }
+  }
+
+  function nextInvoiceNumber(inv){
+    if(!Array.isArray(inv.pending)){
+      inv.pending = [];
+    }
+    if(typeof inv.skipCountdown !== 'number' || inv.skipCountdown < 1 || !Number.isFinite(inv.skipCountdown)){
+      inv.skipCountdown = randomInt(5,10);
+    }
+    if(inv.pending.length > 0){
+      const shouldUsePending = inv.pending.length >= 3 || Math.random() < 0.5;
+      if(shouldUsePending){
+        return inv.pending.shift();
+      }
+    }
+    const number = inv.next;
+    inv.next = number + 1;
+    inv.skipCountdown -= 1;
+    if(inv.skipCountdown <= 0){
+      const skipCount = randomInt(1,2);
+      for(let i=0; i<skipCount; i++){
+        inv.pending.push(inv.next);
+        inv.next += 1;
+      }
+      inv.skipCountdown = randomInt(5,10);
+    }
+    return number;
+  }
 
   function newGen(){
     return { id: safeUUID(), mode: null, name: '', bizType: 'General', lastOut: '', lastIn: '', inv: null };
@@ -193,7 +261,7 @@
   function render(){
     grid.innerHTML='';
     gens.forEach(g => grid.appendChild(card(g)));
-    stats.textContent = `${gens.length} boxes • generic words ${GENERIC_OUT.length}`;
+    stats.textContent = `${gens.length} boxes � generic words ${GENERIC_OUT.length} � incoming templates ${GENERIC_INCOMING_TEMPLATES.length}`;
   }
 
   function card(g){
@@ -267,8 +335,8 @@
     close = close || (()=>{ const b=document.createElement('button'); b.className='close'; b.textContent='×'; b.onclick=(ev)=>{ ev.preventDefault(); if(!confirm('Remove this box?')){ ev.stopPropagation(); return; } removeGen(g.id); }; return b; })();
     badge = badge || (()=>{ const d=document.createElement('div'); d.className='badge business'; d.textContent='BUSINESS'; return d; })();
 
-    // seed invoice if missing (no write here to avoid re-render loops)
-    if(!g.inv){ const fmt=pick(INVOICE_FORMATS); const start=startNumber(fmt); g.inv={fmtId:fmt.id,next:start}; }
+    // ensure invoice state exists (no write here to avoid re-render loops)
+    ensureInvoiceState(g);
 
     const nameRow = document.createElement('div'); nameRow.className='row';
     const name = document.createElement('input'); name.type='text'; name.placeholder='Generator name'; name.value=g.name||'';
@@ -289,7 +357,7 @@
     outHeader.append(outTitle,outTag);
     const outWord = document.createElement('div'); outWord.className='word'; outWord.textContent=g.lastOut||'—';
     const outCtrls = document.createElement('div'); outCtrls.className='controls';
-    const outGen = button('Generate', ()=>{ const list=getOutWordList(g.bizType); setOut(g, outWord, pick(list)); });
+    const outGen = button('Generate', ()=>{ const list=getOutWordList(g.bizType); const choice = pick(list); setOut(g, outWord, applyOutgoingTemplate(choice)); });
     const outCopy = smallButton('Copy', async()=> copyText(g.lastOut, outCopy));
     outCtrls.append(outGen,outCopy);
     outBox.append(outHeader,outWord,outCtrls);
@@ -298,10 +366,9 @@
     const inBox = document.createElement('div'); inBox.className='sub';
     const inHeader = document.createElement('div'); inHeader.className='row';
     const inTitle = document.createElement('h4'); inTitle.textContent='Incoming (Invoice #)';
-    const inFmt = getFmtById(g.inv.fmtId);
-    const inTag = document.createElement('span'); inTag.className='tag'; inTag.textContent=inFmt.pattern.replace('{num}','…');
+    const inTag = document.createElement('span'); inTag.className='tag'; inTag.textContent=`${getIncomingTemplateList(g.bizType).length} templates`;
     inHeader.append(inTitle,inTag);
-    const inWord = document.createElement('div'); inWord.className='word'; inWord.textContent=g.lastIn||'—';
+    const inWord = document.createElement('div'); inWord.className='word'; inWord.textContent=g.lastIn||'-';
     const inCtrls = document.createElement('div'); inCtrls.className='controls';
     const inGen = button('Generate', ()=>{ generateInvoice(g, inWord); });
     const inCopy = smallButton('Copy', async()=> copyText(g.lastIn, inCopy));
@@ -309,7 +376,7 @@
     inBox.append(inHeader,inWord,inCtrls);
 
     // respond to bizType change
-    select.onchange = (e)=>{ g.bizType = e.target.value; write(gens); outTag.textContent = `${getOutWordList(g.bizType).length} words`; };
+    select.onchange = (e)=>{ g.bizType = e.target.value; write(gens); outTag.textContent = `${getOutWordList(g.bizType).length} words`; inTag.textContent = `${getIncomingTemplateList(g.bizType).length} templates`; };
 
     bizRow.append(select, bizHint);
     nameRow.append(name);
@@ -329,17 +396,27 @@
     const span = Math.max(0, max - min);
     return min + Math.floor(Math.random()*(span+1));
   }
-  function formatInvoice(fmt, n){
-    const num = fmt.width>0 ? String(n).padStart(fmt.width,'0') : String(n);
-    return fmt.pattern.replace('{num}', num);
+  function formatInvoice(fmtOrPattern, n, widthOverride){
+    const isString = typeof fmtOrPattern === 'string';
+    const pattern = isString ? fmtOrPattern : (fmtOrPattern && fmtOrPattern.pattern) || '{num}';
+    const widthSource = !isString && fmtOrPattern && typeof fmtOrPattern.width === 'number' ? fmtOrPattern.width : 0;
+    const width = typeof widthOverride === 'number' ? widthOverride : widthSource;
+    const num = width > 0 ? String(n).padStart(width,'0') : String(n);
+    return pattern.replace(/\{num\}/gi, num);
   }
   function generateInvoice(g, el){
-    if(!g.inv){ const fmt=pick(INVOICE_FORMATS); const start=startNumber(fmt); g.inv={fmtId:fmt.id,next:start}; }
-    const fmt = getFmtById(g.inv.fmtId);
-    const text = formatInvoice(fmt, g.inv.next);
-    g.lastIn = text;
-    g.inv.next = g.inv.next + 1;
-    el.textContent = text;
+    ensureInvoiceState(g);
+    const inv = g.inv;
+    const bizType = g.bizType || 'General';
+    const templates = getIncomingTemplateList(bizType);
+    const template = templates.length ? pick(templates) : 'Invoice {num}';
+    const number = nextInvoiceNumber(inv);
+    const fmt = inv.fmtId ? getFmtById(inv.fmtId) : null;
+    const width = typeof inv.width === 'number' ? inv.width : (fmt && typeof fmt.width === 'number' ? fmt.width : 0);
+    if(typeof inv.width !== 'number') inv.width = width;
+    const textValue = formatInvoice(template, number, width);
+    g.lastIn = textValue;
+    el.textContent = textValue;
     write(gens);
   }
   function setOut(g, el, val){ g.lastOut = val; el.textContent = val; write(gens); }
@@ -376,15 +453,18 @@
 
     tryTest('new box starts in select mode', ()=>{ const g = newGen(); assert(g.mode===null, 'mode should start null'); });
     tryTest('invalid mode falls back to chooser', ()=>{ const g=newGen(); g.mode='weird'; const el=card(g); const hasChooser=!!el.querySelector('.choices'); assert(hasChooser,'chooser not shown for invalid mode'); });
-    tryTest('choosing Business sets mode and seeds inv', ()=>{ const g = newGen(); g.mode='business'; if(!g.inv){ const fmt=pick(INVOICE_FORMATS); const start=startNumber(fmt); g.inv={fmtId:fmt.id,next:start}; } assert(g.mode==='business','mode not business'); assert(g.inv && g.inv.fmtId,'inv not seeded'); assert(g.inv.next>=50,'start < 50'); });
+    tryTest('choosing Business sets mode and seeds inv', ()=>{ const g = newGen(); g.mode='business'; ensureInvoiceState(g); assert(g.mode==='business','mode not business'); assert(g.inv && g.inv.fmtId,'inv not seeded'); assert(g.inv.next>=50,'start < 50'); assert(Array.isArray(g.inv.pending),'pending not array'); assert(typeof g.inv.skipCountdown === 'number','skip countdown missing'); });
     tryTest('choosing Personal sets mode and placeholder', ()=>{ const g = newGen(); g.mode='personal'; write([g]); const el = card(g); assert(el.querySelector('.placeholder'),'no placeholder for personal'); assert(el.querySelector('.badge').textContent==='PERSONAL','badge not personal'); });
     tryTest('startNumber() never below 50', ()=>{ for(const fmt of INVOICE_FORMATS){ for(let i=0;i<20;i++){ const n=startNumber(fmt); assert(n>=50, `got ${n} for ${fmt.id}`); } } });
     tryTest('startNumber() respects width', ()=>{ for(const fmt of INVOICE_FORMATS){ if(fmt.width>0){ for(let i=0;i<10;i++){ const n=startNumber(fmt); const max=10**fmt.width-1; assert(n<=max, `n ${n} > ${max}`); } } } });
     tryTest('format padding/no padding', ()=>{ const f={id:'W4',width:4,pattern:'Invoice {num}'}; assert(formatInvoice(f,52)==='Invoice 0052','pad fail'); const f0={id:'W0',width:0,pattern:'INV {num}'}; assert(formatInvoice(f0,52)==='INV 52','nopad fail'); });
-    tryTest('generateInvoice holds format and increments', ()=>{ const g=newGen(); g.mode='business'; const fmt=pick(INVOICE_FORMATS); const start=startNumber(fmt); g.inv={fmtId:fmt.id,next:start}; const el=document.createElement('div'); generateInvoice(g,el); const fmtId=g.inv.fmtId; const n1=g.inv.next; const first=g.lastIn; generateInvoice(g,el); assert(g.inv.fmtId===fmtId,'fmt changed'); assert(g.inv.next===n1+1,'no +1'); assert(g.lastIn!==first,'text same'); });
-    tryTest('business tag count updates on bizType change', ()=>{ const g=newGen(); g.mode='business'; const el=card(g); const select=el.querySelector('select'); const tag=el.querySelectorAll('.tag')[0]; const before=tag.textContent; select.value='Construction'; select.dispatchEvent(new Event('change')); const after=tag.textContent; assert(before!==after,'tag unchanged'); });
+    tryTest('generateInvoice queues and replays skipped numbers', ()=>{ const g=newGen(); g.mode='business'; ensureInvoiceState(g); const el=document.createElement('div'); g.inv.skipCountdown = 1; const firstExpected = g.inv.next; generateInvoice(g,el); const formattedFirst = formatInvoice('{num}', firstExpected, g.inv.width); assert(g.lastIn.includes(formattedFirst),'first number missing'); assert(g.inv.pending.length>=1,'pending queue not created'); const forced = g.inv.pending[0]; while(g.inv.pending.length<3){ g.inv.pending.push(g.inv.next); g.inv.next += 1; } g.inv.skipCountdown = 5; const beforeQueueSize = g.inv.pending.length; generateInvoice(g,el); const formattedForced = formatInvoice('{num}', forced, g.inv.width); assert(g.lastIn.includes(formattedForced),'pending number not used'); assert(g.inv.pending.length === beforeQueueSize-1,'pending length not reduced'); assert(!g.inv.pending.includes(forced),'pending number still present'); });
+    tryTest('business tag count updates on bizType change', ()=>{ const g=newGen(); g.mode='business'; const el=card(g); const select=el.querySelector('select'); const tags=el.querySelectorAll('.tag'); const outTag=tags[0]; const inTag=tags[1]; const beforeOut=outTag.textContent; const beforeIn=inTag.textContent; select.value='Landscaper'; select.dispatchEvent(new Event('change')); const afterOut=outTag.textContent; const afterIn=inTag.textContent; assert(beforeOut!==afterOut,'out tag unchanged'); assert(beforeIn!==afterIn,'in tag unchanged'); });
     tryTest('removeGen removes exactly one item', ()=>{ const prev = gens.length; const g = newGen(); gens.push(g); write(gens); removeGen(g.id); if(gens.length !== prev){ throw new Error(`expected length ${prev} got ${gens.length}`); } });
-    tryTest('outgoing list mixes generic and business-specific', ()=>{ const list = getOutWordList('Construction'); if(!list.includes('Parking')) throw new Error('Parking missing'); if(!list.includes('Concrete services')) throw new Error('Concrete services missing'); const general = getOutWordList('General'); if(general.includes('Concrete services')) throw new Error('Construction word leaked into General'); });
+    tryTest('outgoing XXXX placeholder replaced', ()=>{ const samples = [applyOutgoingTemplate('PAY INVOICE NO XXXX'), applyOutgoingTemplate('reference no xxxx'), applyOutgoingTemplate('Ref XXXX')]; samples.forEach((sample, idx)=>{ const match = sample.match(/\d+/); if(!match) throw new Error(`digits missing in sample ${idx}`); const len = match[0].length; if(len < 4 || len > 8) throw new Error(`digits length ${len} out of range`); }); });
+    tryTest('outgoing list mixes generic and business-specific', ()=>{ const list = getOutWordList('Landscaper'); if(!list.includes('Mulch')) throw new Error('Mulch missing'); if(!list.includes('Equipment hire')) throw new Error('Equipment hire missing'); const general = getOutWordList('General'); if(general.includes('Mulch')) throw new Error('Landscaper word leaked into General'); });
+
+    tryTest('incoming template list adapts to biz type', ()=>{ const general = getIncomingTemplateList('General'); const hair = getIncomingTemplateList('Hairdresser'); assert(hair.length>general.length,'hairdresser templates not added'); const hasHair = hair.some(t=>/hair/i.test(t)); assert(hasHair,'hairdresser phrase missing'); });
 
     testOut.textContent = lines.join('\n');
     testOut.style.display = 'block';
