@@ -177,9 +177,45 @@
 
   // ────────────────────────────────────────────────────────────
   // Storage
-  const KEY = 'btw_generators_v4';
-  const read  = () => JSON.parse(localStorage.getItem(KEY) || '[]');
-  const write = (arr) => { try { localStorage.setItem(KEY, JSON.stringify(arr)); } catch(e) { console.warn('localStorage write failed', e); } };
+  const KEY = 'btw_generators_v5';
+  const LEGACY_KEYS = ['btw_generators_v4','btw_generators_v3'];
+
+  const parseStored = (raw) => {
+    if(!raw) return [];
+    try {
+      const data = JSON.parse(raw);
+      return Array.isArray(data) ? data : [];
+    } catch(e) {
+      console.warn('localStorage parse failed', e);
+      return [];
+    }
+  };
+
+  const read  = () => {
+    const current = localStorage.getItem(KEY);
+    if(current){
+      return parseStored(current).map(sanitizeGenerator);
+    }
+    for(const legacy of LEGACY_KEYS){
+      const raw = localStorage.getItem(legacy);
+      if(raw){
+        const data = parseStored(raw).map(sanitizeGenerator);
+        try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e) { console.warn('localStorage migrate failed', e); }
+        return data;
+      }
+    }
+    return [];
+  };
+
+  const write = (arr) => {
+    if(!Array.isArray(arr)) return;
+    const sanitized = arr.map((item, idx) => {
+      const clean = sanitizeGenerator(item);
+      arr[idx] = clean;
+      return clean;
+    });
+    try { localStorage.setItem(KEY, JSON.stringify(sanitized)); } catch(e) { console.warn('localStorage write failed', e); }
+  };
 
   // State
   let gens = read();
@@ -195,6 +231,34 @@
   const applyOutgoingTemplate = (word) => word ? word.replace(/[xX]{3,}/g, () => randomDigits(randomInt(4,8))) : word;
   const getOutWordList = (bizType) => uniq([ ...GENERIC_OUT, ...((OUT_WORDS_BY_BUSINESS[bizType])||[]) ]);
   const getIncomingTemplateList = (bizType) => uniq([ ...GENERIC_INCOMING_TEMPLATES, ...((INCOMING_TEMPLATES_BY_BUSINESS[bizType])||[]) ]);
+
+  function sanitizeGenerator(g){
+    if(!g || typeof g !== 'object'){
+      return { id: safeUUID(), mode: null, name: '', bizType: 'General', lastOut: '', lastIn: '', inv: null };
+    }
+    if(!g.id) g.id = safeUUID();
+    if(typeof g.name !== 'string') g.name = '';
+    if(typeof g.lastOut !== 'string') g.lastOut = '';
+    if(typeof g.lastIn !== 'string') g.lastIn = '';
+    if(typeof g.bizType !== 'string' || !BUSINESS_TYPES.includes(g.bizType)) g.bizType = 'General';
+    if(typeof g.mode === 'string'){
+      const mode = g.mode.toLowerCase();
+      g.mode = mode === 'business' || mode === 'personal' ? mode : null;
+    } else {
+      g.mode = null;
+    }
+    if(g.mode !== 'business'){
+      g.inv = null;
+      return g;
+    }
+    if(!g.inv || typeof g.inv !== 'object'){
+      g.inv = null;
+      return g;
+    }
+    if(!Array.isArray(g.inv.pending)) g.inv.pending = [];
+    if(typeof g.inv.skipCountdown !== 'number' || !Number.isFinite(g.inv.skipCountdown)) g.inv.skipCountdown = randomInt(5,10);
+    return g;
+  }
 
   function ensureInvoiceState(g){
     if(!g.inv || typeof g.inv !== 'object'){
