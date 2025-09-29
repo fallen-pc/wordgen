@@ -182,8 +182,7 @@
       align-items: center;
     }
 
-    input[type="text"],
-    select {
+    input[type="text"], select {
       flex: 1;
       background: #07140f;
       border: 1px solid var(--border);
@@ -288,47 +287,6 @@
       border-color: var(--per-br);
     }
 
-    .chooser {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      padding: 16px;
-      border: 1px dashed rgba(16, 229, 128, 0.35);
-      border-radius: 12px;
-      min-height: 260px;
-    }
-
-    .choices {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .typeBtn {
-      display: inline-block;
-      min-width: 140px;
-      font-size: 16px;
-      padding: 12px 16px;
-      border-radius: 12px;
-    }
-
-    .typeBtn.business {
-      background: rgba(16, 229, 128, 0.12);
-      border: 1px solid var(--accent);
-    }
-
-    .typeBtn.business:hover {
-      background: rgba(16, 229, 128, 0.18);
-    }
-
-    .typeBtn.personal {
-      background: rgba(181, 83, 208, 0.12);
-      border: 1px solid var(--per-br);
-    }
-
     .placeholder {
       flex: 1;
       display: flex;
@@ -390,250 +348,6 @@
   </main>
 
   <script type="module">
-    const splash = document.getElementById('splash');
-    const enterAppBtn = document.getElementById('enterApp');
-    if (enterAppBtn && splash) {
-      enterAppBtn.addEventListener('click', () => {
-        document.body.classList.remove('splash-active');
-        splash.classList.add('hidden');
-      });
-    }
-
-    const GENERIC_OUT = [
-      'Payment','Transfer','Expenses','Fees','Supplies','Equipment','Subscription','Rent','Insurance','Reference No. XXXX','Reference no XXXX','Ref XXXX','Reference number XXXX','Payment reference XXXX'
-    ];
-
-    const OUT_WORDS_BY_BUSINESS = {
-      'General': ['Stationery','Software','Travel','Fuel','Advertising'],
-      'Sex Worker': ['Private booking','Escort service','Club fees','Condoms','Lingerie','Room hire','Security','Advertising'],
-      'Landscaper': ['Lawn care','Mulch','Planting','Hedge trimming','Green waste disposal','Garden supplies','Equipment hire'],
-      'Cleaner': ['Cleaning supplies','Detergents','Disinfectant','Window cleaning','Bond clean','Consumables','Laundry service'],
-      'Hairdresser': ['Salon rent','Hair colour stock','Shampoo','Styling tools','Foils','Product restock','Appointment software'],
-      'Massage Therapist': ['Massage oil','Table maintenance','Laundry service','Clinic rent','Professional indemnity','CPD training'],
-      'Dog Walker': ['Leads and harnesses','Treats','Dog transport','Pet insurance','Dog park fees','Marketing flyers'],
-      'Personal Trainer': ['Gym rent','Equipment purchase','Nutrition plans','Fitness software','Travel to client','Marketing'],
-      'Freelance Photographer': ['Camera gear','Lens hire','Editing software','Studio hire','Printing','Travel shoot'],
-      'Tutor': ['Learning materials','Printing notes','Online platform fees','Whiteboard supplies','Travel to student','Exam prep guides']
-    };
-
-    const GENERIC_INCOMING_TEMPLATES = [
-      'Invoice {num}','Invoice no. {num}','Inv {num}','Invoice {num} paid in full','Payment made for inv {num}','PAYMENT INV {num}','Payment received inv {num}','Payment received for invoice {num}','Payment made for invoice {num}','Payment received - inv {num}'
-    ];
-
-    const INCOMING_TEMPLATES_BY_BUSINESS = {
-      'General': ['Service payment for invoice {num}','Invoice {num} processed'],
-      'Sex Worker': ['Session invoice {num} settled','Private booking payment inv {num}','Deposit received inv {num}'],
-      'Landscaper': ['Garden service inv {num} paid','Lawn maintenance invoice {num} settled','Horticulture invoice {num} processed'],
-      'Cleaner': ['Cleaning service inv {num} paid','End of lease invoice {num} settled','Domestic clean inv {num} processed'],
-      'Hairdresser': ['Salon service invoice {num} settled','Colour package inv {num} paid','Hair appointment inv {num} processed'],
-      'Massage Therapist': ['Treatment invoice {num} paid','Wellness session inv {num} settled','Clinic payment inv {num} processed'],
-      'Dog Walker': ['Walk package inv {num} paid','Pet care invoice {num} settled','Canine service inv {num} processed'],
-      'Personal Trainer': ['Training session inv {num} paid','Fitness program invoice {num} settled','Coaching inv {num} processed'],
-      'Freelance Photographer': ['Shoot invoice {num} paid','Photo package inv {num} settled','Editing invoice {num} processed'],
-      'Tutor': ['Lesson invoice {num} paid','Tutoring inv {num} settled','Session invoice {num} processed']
-    };
-
-    const INVOICE_FORMATS = [
-      { id:'INV_NO_4',       width:4, pattern:'Invoice No {num}' },
-      { id:'INV_HASH_4',     width:4, pattern:'Invoice #{num}' },
-      { id:'INV_SIMPLE_4',   width:4, pattern:'Invoice {num}' },
-      { id:'INV_NUMBER_7',   width:7, pattern:'Invoice Number {num}' },
-      { id:'INV_CODE',       width:0, pattern:'INV {num}' },
-      { id:'INV_DASH_5',     width:5, pattern:'INV-{num}' },
-      { id:'TAX_INV_6',      width:6, pattern:'Tax Invoice {num}' },
-      { id:'INV_NO_COLON_5', width:5, pattern:'Invoice No: {num}' }
-    ];
-
-    const BUSINESS_TYPES = [
-      'General','Sex Worker','Landscaper','Cleaner','Hairdresser','Massage Therapist','Dog Walker','Personal Trainer','Freelance Photographer','Tutor'
-    ];
-
-    const KEY = 'btw_generators_v5';
-    const LEGACY_KEYS = ['btw_generators_v4','btw_generators_v3'];
-
-    const parseStored = (raw) => {
-      if (!raw) return [];
-      try {
-        const data = JSON.parse(raw);
-        return Array.isArray(data) ? data : [];
-      } catch (err) {
-        console.warn('localStorage parse failed', err);
-        return [];
-      }
-    };
-
-    function sanitizeGenerator(g) {
-      if (!g || typeof g !== 'object') {
-        return { id: safeUUID(), mode: null, name: '', bizType: 'General', lastOut: '', lastIn: '', inv: null };
-      }
-      if (!g.id) g.id = safeUUID();
-      if (typeof g.name !== 'string') g.name = '';
-      if (typeof g.lastOut !== 'string') g.lastOut = '';
-      if (typeof g.lastIn !== 'string') g.lastIn = '';
-      if (typeof g.bizType !== 'string' || !BUSINESS_TYPES.includes(g.bizType)) g.bizType = 'General';
-      if (typeof g.mode === 'string') {
-        const mode = g.mode.toLowerCase();
-        g.mode = mode === 'business' || mode === 'personal' ? mode : null;
-      } else {
-        g.mode = null;
-      }
-      if (g.mode !== 'business') {
-        g.inv = null;
-        return g;
-      }
-      if (!g.inv || typeof g.inv !== 'object') {
-        g.inv = null;
-        return g;
-      }
-      if (!Array.isArray(g.inv.pending)) g.inv.pending = [];
-      if (typeof g.inv.skipCountdown !== 'number' || !Number.isFinite(g.inv.skipCountdown) || g.inv.skipCountdown < 1) {
-        g.inv.skipCountdown = randomInt(5,10);
-      }
-      return g;
-    }
-
-    const read = () => {
-      const current = localStorage.getItem(KEY);
-      if (current) {
-        return parseStored(current).map(sanitizeGenerator);
-      }
-      for (const legacy of LEGACY_KEYS) {
-        const raw = localStorage.getItem(legacy);
-        if (raw) {
-          const data = parseStored(raw).map(sanitizeGenerator);
-          try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (err) { console.warn('localStorage migrate failed', err); }
-          return data;
-        }
-      }
-      return [];
-    };
-
-    const write = (arr) => {
-      if (!Array.isArray(arr)) return;
-      try {
-        const clean = arr.map((item) => sanitizeGenerator(item));
-        localStorage.setItem(KEY, JSON.stringify(clean));
-      } catch (err) {
-        console.warn('localStorage write failed', err);
-      }
-    };
-
-    const safeUUID = () => (window.crypto && crypto.randomUUID ? crypto.randomUUID() : ('g-' + Date.now().toString(36) + Math.random().toString(36).slice(2,8)));
-    const uniq = (arr) => [...new Set(arr)];
-    const pick = (list) => list[Math.floor(Math.random()*list.length)];
-    const randomInt = (min,max) => Math.floor(Math.random()*(max-min+1))+min;
-    const randomDigits = (len=4) => Array.from({length:len}, () => Math.floor(Math.random()*10)).join('');
-    const applyOutgoingTemplate = (word) => word ? word.replace(/[xX]{3,}/g, () => randomDigits(randomInt(4,8))) : word;
-    const getOutWordList = (bizType) => uniq([...GENERIC_OUT, ...((OUT_WORDS_BY_BUSINESS[bizType])||[])]);
-    const getIncomingTemplateList = (bizType) => uniq([...GENERIC_INCOMING_TEMPLATES, ...((INCOMING_TEMPLATES_BY_BUSINESS[bizType])||[])]);
-
-    function ensureInvoiceState(g) {
-      if (!g.inv || typeof g.inv !== 'object') {
-        const fmt = pick(INVOICE_FORMATS);
-        g.inv = { fmtId: fmt.id, width: typeof fmt.width === 'number' ? fmt.width : 0, next: startNumber(fmt), pending: [], skipCountdown: randomInt(5,10) };
-        return;
-      }
-      const inv = g.inv;
-      if (!inv.fmtId) {
-        const fmt = pick(INVOICE_FORMATS);
-        inv.fmtId = fmt.id;
-        inv.width = typeof fmt.width === 'number' ? fmt.width : 0;
-        inv.next = startNumber(fmt);
-      }
-      if (typeof inv.width !== 'number') {
-        const fmt = getFmtById(inv.fmtId);
-        inv.width = fmt ? fmt.width : 0;
-      }
-      if (typeof inv.next !== 'number' || !Number.isFinite(inv.next)) {
-        const fmt = getFmtById(inv.fmtId);
-        inv.next = startNumber(fmt);
-      }
-      inv.next = Math.max(1, Math.round(inv.next));
-      if (!Array.isArray(inv.pending)) inv.pending = [];
-      if (typeof inv.skipCountdown !== 'number' || !Number.isFinite(inv.skipCountdown) || inv.skipCountdown < 1) {
-        inv.skipCountdown = randomInt(5,10);
-      }
-    }
-
-    function nextInvoiceNumber(inv) {
-      if (!Array.isArray(inv.pending)) inv.pending = [];
-      if (typeof inv.skipCountdown !== 'number' || !Number.isFinite(inv.skipCountdown) || inv.skipCountdown < 1) {
-        inv.skipCountdown = randomInt(5,10);
-      }
-      if (inv.pending.length > 0) {
-        const shouldUsePending = inv.pending.length >= 3 || Math.random() < 0.5;
-        if (shouldUsePending) {
-          return inv.pending.shift();
-        }
-      }
-      const number = inv.next;
-      inv.next = number + 1;
-      inv.skipCountdown -= 1;
-      if (inv.skipCountdown <= 0) {
-        const skipCount = randomInt(1,2);
-        for (let i=0; i<skipCount; i+=1) {
-          inv.pending.push(inv.next);
-          inv.next += 1;
-        }
-        inv.skipCountdown = randomInt(5,10);
-      }
-      return number;
-    }
-
-    let gens = read();
-    const grid = document.getElementById('grid');
-    const stats = document.getElementById('stats');
-
-    function newGen() {
-      return { id: safeUUID(), mode: null, name: '', bizType: 'General', lastOut: '', lastIn: '', inv: null };
-    }
-
-    function render() {
-      if (!grid || !stats) return;
-      grid.innerHTML = '';
-      gens.forEach((g) => grid.appendChild(card(g)));
-      stats.textContent = `${gens.length} boxes • generic words ${GENERIC_OUT.length} • incoming templates ${GENERIC_INCOMING_TEMPLATES.length}`;
-    }
-
-    function card(g) {
-      const el = document.createElement('div');
-      el.className = 'card';
-      el.dataset.id = g.id;
-
-      const close = document.createElement('button');
-      close.className = 'close';
-      close.setAttribute('aria-label','Close');
-      close.textContent = 'x';
-      close.onclick = (ev) => {
-        ev.preventDefault();
-        if (confirm('Remove this box?')) removeGen(g.id);
-      };
-
-      const badge = document.createElement('div');
-      badge.className = 'badge ' + (g.mode==='business' ? 'business' : g.mode==='personal' ? 'personal' : '');
-      badge.textContent = g.mode ? (g.mode==='business' ? 'BUSINESS' : 'PERSONAL') : 'SELECT TYPE';
-
-      if (!g.mode || (g.mode!=='business' && g.mode!=='personal')) {
-        const chooser = document.createElement('div');
-        chooser.className = 'chooser';
-        const info = document.createElement('div');
-        info.className = 'muted';
-        info.textContent = 'Choose a box type';
-        const row = document.createElement('div');
-        row.className = 'choices';
-
-        const bBtn = document.createElement('button');
-        bBtn.className = 'typeBtn business';
-        bBtn.type = 'button';
-        bBtn.textContent = 'Business';
-        bBtn.onclick = (ev) => {
-          ev.preventDefault();
-          g.mode = 'business';
-          ensureInvoiceState(g);
-          write(gens);
-        </script>
-</body>
-</html>
     const splash = document.getElementById('splash');
     const enterAppBtn = document.getElementById('enterApp');
     if (enterAppBtn && splash) {
@@ -836,8 +550,9 @@
       if (!grid || !stats) return;
       grid.innerHTML = '';
       gens.forEach((g) => grid.appendChild(card(g)));
-      stats.textContent = `${gens.length} boxes • generic words ${GENERIC_OUT.length} • incoming templates ${GENERIC_INCOMING_TEMPLATES.length}`;
+      stats.textContent = ${gens.length} boxes • generic words  • incoming templates ;
     }
+
     function card(g) {
       const el = document.createElement('div');
       el.className = 'card';
@@ -857,13 +572,11 @@
       badge.textContent = g.mode ? (g.mode==='business' ? 'BUSINESS' : 'PERSONAL') : 'SELECT TYPE';
 
       if (!g.mode || (g.mode!=='business' && g.mode!=='personal')) {
-        const chooser = document.createElement('div');
-        chooser.className = 'chooser';
-        const info = document.createElement('div'); info.className = 'muted'; info.textContent = 'Choose a box type';
-        const row = document.createElement('div'); row.className = 'choices';
+        const chooser = document.createElement('div'); chooser.className='chooser';
+        const info = document.createElement('div'); info.className='muted'; info.textContent='Choose a box type';
+        const row = document.createElement('div'); row.className='choices';
 
-        const bBtn = document.createElement('button');
-        bBtn.className = 'typeBtn business'; bBtn.type='button'; bBtn.textContent='Business';
+        const bBtn = document.createElement('button'); bBtn.className='typeBtn business'; bBtn.type='button'; bBtn.textContent='Business';
         bBtn.onclick = (ev) => {
           ev.preventDefault();
           g.mode = 'business';
@@ -873,8 +586,7 @@
           grid.replaceChild(newEl, el);
         };
 
-        const pBtn = document.createElement('button');
-        pBtn.className = 'typeBtn personal'; pBtn.type='button'; pBtn.textContent='Personal';
+        const pBtn = document.createElement('button'); pBtn.className='typeBtn personal'; pBtn.type='button'; pBtn.textContent='Personal';
         pBtn.onclick = (ev) => {
           ev.preventDefault();
           g.mode = 'personal';
@@ -898,8 +610,7 @@
       el.className = 'card';
       el.dataset.id = g.id;
       close = close || (() => {
-        const b = document.createElement('button');
-        b.className = 'close'; b.textContent = 'x';
+        const b = document.createElement('button'); b.className='close'; b.textContent='x';
         b.onclick = (ev) => {
           ev.preventDefault();
           if (!confirm('Remove this box?')) { ev.stopPropagation(); return; }
@@ -908,12 +619,10 @@
         return b;
       })();
       badge = badge || (() => {
-        const d = document.createElement('div');
-        d.className = 'badge personal'; d.textContent = 'PERSONAL';
-        return d;
+        const d = document.createElement('div'); d.className='badge personal'; d.textContent='PERSONAL'; return d;
       })();
 
-      const nameRow = document.createElement('div'); nameRow.className = 'row';
+      const nameRow = document.createElement('div'); nameRow.className='row';
       const name = document.createElement('input'); name.type='text'; name.placeholder='Generator name'; name.value=g.name||'';
       name.oninput = (e) => { g.name = e.target.value; write(gens); };
 
@@ -931,8 +640,7 @@
       el.className = 'card';
       el.dataset.id = g.id;
       close = close || (() => {
-        const b = document.createElement('button');
-        b.className='close'; b.textContent='x';
+        const b = document.createElement('button'); b.className='close'; b.textContent='x';
         b.onclick = (ev) => {
           ev.preventDefault();
           if (!confirm('Remove this box?')) { ev.stopPropagation(); return; }
@@ -941,9 +649,7 @@
         return b;
       })();
       badge = badge || (() => {
-        const d = document.createElement('div');
-        d.className='badge business'; d.textContent='BUSINESS';
-        return d;
+        const d = document.createElement('div'); d.className='badge business'; d.textContent='BUSINESS'; return d;
       })();
 
       ensureInvoiceState(g);
@@ -961,7 +667,7 @@
       const outBox = document.createElement('div'); outBox.className='sub';
       const outHeader = document.createElement('div'); outHeader.className='row';
       const outTitle = document.createElement('h4'); outTitle.textContent='Outgoing';
-      const outTag = document.createElement('span'); outTag.className='tag'; outTag.textContent=`${getOutWordList(g.bizType).length} words`;
+      const outTag = document.createElement('span'); outTag.className='tag'; outTag.textContent=${getOutWordList(g.bizType).length} words;
       outHeader.append(outTitle,outTag);
       const outWord = document.createElement('div'); outWord.className='word'; outWord.textContent=g.lastOut||'-';
       const outCtrls = document.createElement('div'); outCtrls.className='controls';
@@ -977,7 +683,7 @@
       const inBox = document.createElement('div'); inBox.className='sub';
       const inHeader = document.createElement('div'); inHeader.className='row';
       const inTitle = document.createElement('h4'); inTitle.textContent='Incoming (Invoice #)';
-      const inTag = document.createElement('span'); inTag.className='tag'; inTag.textContent=`${getIncomingTemplateList(g.bizType).length} templates`;
+      const inTag = document.createElement('span'); inTag.className='tag'; inTag.textContent=${getIncomingTemplateList(g.bizType).length} templates;
       inHeader.append(inTitle,inTag);
       const inWord = document.createElement('div'); inWord.className='word'; inWord.textContent=g.lastIn||'-';
       const inCtrls = document.createElement('div'); inCtrls.className='controls';
@@ -989,8 +695,8 @@
       select.onchange = (e) => {
         g.bizType = e.target.value;
         write(gens);
-        outTag.textContent = `${getOutWordList(g.bizType).length} words`;
-        inTag.textContent = `${getIncomingTemplateList(g.bizType).length} templates`;
+        outTag.textContent = ${getOutWordList(g.bizType).length} words;
+        inTag.textContent = ${getIncomingTemplateList(g.bizType).length} templates;
       };
 
       bizRow.append(select,bizHint);
@@ -1127,20 +833,21 @@
     function runTests() {
       if (!testOut) return;
       const lines = [];
-      const pass = (m) => lines.push(`? ${m}`);
-      const fail = (m,e) => lines.push(`? ${m}: ${e.message}`);
+      const pass = (m) => lines.push(? );
+      const fail = (m,e) => lines.push(? : );
       const tryTest = (name, fn) => { try { fn(); pass(name); } catch (e) { fail(name,e); } };
 
       tryTest('new box starts in select mode', () => { const g = newGen(); assert(g.mode === null, 'mode should start null'); });
       tryTest('invalid mode falls back to chooser', () => { const g = newGen(); g.mode='weird'; const el = card(g); assert(el.querySelector('.choices'), 'chooser not shown'); });
       tryTest('choosing Business sets mode and seeds inv', () => { const g = newGen(); g.mode='business'; ensureInvoiceState(g); assert(g.inv && g.inv.fmtId, 'inv not seeded'); assert(g.inv.next >= 50, 'start < 50'); assert(Array.isArray(g.inv.pending), 'pending not array'); });
       tryTest('choosing Personal sets mode and placeholder', () => { const g = newGen(); g.mode='personal'; write([g]); const el = card(g); assert(el.querySelector('.placeholder'), 'no placeholder'); assert(el.querySelector('.badge').textContent==='PERSONAL', 'badge not personal'); });
-      tryTest('startNumber never below 50', () => { for (const fmt of INVOICE_FORMATS) { for (let i=0;i<20;i+=1) { const n=startNumber(fmt); assert(n>=50, `got ${n} for ${fmt.id}`); } } });
-      tryTest('startNumber respects width', () => { for (const fmt of INVOICE_FORMATS) { if (fmt.width>0) { for (let i=0;i<10;i+=1) { const n=startNumber(fmt); const max = 10**fmt.width - 1; assert(n<=max, `n ${n} > ${max}`); } } } });
+      tryTest('startNumber never below 50', () => { for (const fmt of INVOICE_FORMATS) { for (let i=0;i<20;i+=1) { const n=startNumber(fmt); assert(n>=50, got  for ); } } });
+      tryTest('startNumber respects width', () => { for (const fmt of INVOICE_FORMATS) { if (fmt.width>0) { for (let i=0;i<10;i+=1) { const n=startNumber(fmt); const max = 10**fmt.width - 1; assert(n<=max, 
+  > ); } } } });
       tryTest('formatInvoice padding', () => { const f={width:4,pattern:'Invoice {num}'}; assert(formatInvoice(f,52)==='Invoice 0052','pad fail'); const f0={width:0,pattern:'INV {num}'}; assert(formatInvoice(f0,52)==='INV 52','nopad fail'); });
       tryTest('generateInvoice queues skipped numbers', () => { const g=newGen(); g.mode='business'; ensureInvoiceState(g); const el=document.createElement('div'); g.inv.skipCountdown=1; const first=g.inv.next; generateInvoice(g,el); assert(g.lastIn.includes(String(first).slice(-2)), 'first missing'); assert(g.inv.pending.length>=1, 'pending not created'); const pending = g.inv.pending[0]; while (g.inv.pending.length<3) { g.inv.pending.push(g.inv.next); g.inv.next+=1; } g.inv.skipCountdown=5; const before=g.inv.pending.length; generateInvoice(g,el); assert(g.inv.pending.length===before-1, 'pending not consumed'); assert(!g.inv.pending.includes(pending), 'pending still present'); });
       tryTest('business tag updates on change', () => { const g=newGen(); g.mode='business'; const el=card(g); const select=el.querySelector('select'); const tags=el.querySelectorAll('.tag'); const outTag=tags[0]; const inTag=tags[1]; const beforeOut=outTag.textContent; const beforeIn=inTag.textContent; select.value='Landscaper'; select.dispatchEvent(new Event('change')); assert(outTag.textContent!==beforeOut,'out tag same'); assert(inTag.textContent!==beforeIn,'in tag same'); });
-      tryTest('outgoing placeholder replaced', () => { const samples=[applyOutgoingTemplate('PAY INVOICE NO XXXX'),applyOutgoingTemplate('reference no xxxx'),applyOutgoingTemplate('Ref XXXX')]; samples.forEach((sample,idx)=>{ const match = sample.match(/\d+/); assert(match,'missing digits'); const len = match[0].length; assert(len>=4 && len<=8, `digits length ${len} out of range`); }); });
+      tryTest('outgoing placeholder replaced', () => { const samples=[applyOutgoingTemplate('PAY INVOICE NO XXXX'),applyOutgoingTemplate('reference no xxxx'),applyOutgoingTemplate('Ref XXXX')]; samples.forEach((sample,idx)=>{ const match = sample.match(/\d+/); assert(match,'missing digits'); const len = match[0].length; assert(len>=4 && len<=8, digits length  out of range); }); });
       tryTest('outgoing list mixes correctly', () => { const list = getOutWordList('Landscaper'); assert(list.includes('Mulch'),'Mulch missing'); assert(list.includes('Equipment hire'),'Equipment hire missing'); const general=getOutWordList('General'); assert(!general.includes('Mulch'),'Mulch leaked'); });
       tryTest('incoming template list adapts', () => { const general = getIncomingTemplateList('General'); const hair = getIncomingTemplateList('Hairdresser'); assert(hair.length>general.length,'hairdresser not longer'); assert(hair.some(t=>/hair/i.test(t)),'hair phrase missing'); });
 
@@ -1157,10 +864,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
