@@ -5,76 +5,101 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Business/Personal Transfer Word Generators</title>
 <meta name="theme-color" content="#66e4f0" />
-<style>
+<style><style>
   /* CRT‑green theme to match the provided logo */
-  :root{
-    --bg:#050c08;           /* near‑black */
-    --card:#0a1410;         /* dark panel */
-    --muted:#7aa690;        /* desaturated green */
-    --border:#133326;       /* deep green border */
-    --fg:#d2ffe7;           /* pale mint text */
-    --accent:#66e4f0;       /* neon teal accent */
-    --accent-2:#34c7e3;     /* hover variant */
-    --biz:#0d1f24;          /* business badge bg */
-    --biz-br:#66e4f0;       /* business badge border */
-    --per:#291a30;          /* personal badge bg (complement) */
-    --per-br:#b67ad6;       /* personal badge border */       /* personal badge border */
+    :root{
+    --bg:#050c08;
+    --card:#0a1410;
+    --muted:#7aa690;
+    --border:#133326;
+    --fg:#d2ffe7;
+    --accent:#66e4f0;
+    --accent-2:#34c7e3;
+    --biz:#0d1f24;
+    --biz-br:#66e4f0;
+    --biz-text:#b9f8db;
+    --per:#291a30;
+    --per-br:#b67ad6;
+    --button-bg:#0e1d17;
+    --input-bg:#07140f;
+    --pill-bg:#0c1d17;
+    --tag-bg:#08130f;
+    --tag-text:#9beec9;
+    --hint:#9bd4bd;
+    --placeholder-border:#503050;
+    --uc-bg:#3a1d3a;
+    --uc-border:#805080;
+    --primary-on-accent:#062f1f;
+    --ok:#8be28b;
+    --fail:#ff8686;
+    --scanline:rgba(102,228,240,0.05);
+    --shadow:rgba(0,0,0,.45);
+    --halo-soft:rgba(16,229,128,.05);
+    --halo-mid:rgba(16,229,128,.1);
+    --halo-strong:rgba(16,229,128,.35);
+    --halo-glow:rgba(16,229,128,.4);
+    --halo-spot:rgba(16,229,128,.08);
+    --business-btn-bg:rgba(16,229,128,.12);
+    --business-btn-hover:rgba(16,229,128,.18);
+    --personal-btn-bg:rgba(181,83,208,.12);
+    --logo-band:rgba(16,229,128,.25);
+    --logo-band-soft:rgba(16,229,128,.05);
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,Segoe UI,Roboto,Arial,sans-serif;position:relative}
   /* soft scanline effect to echo the logo */
-  body::before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient( to bottom, rgba(102,228,240,0.05), rgba(102,228,240,0.05) 1px, transparent 2px, transparent 3px)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient( to bottom, var(--scanline), var(--scanline) 1px, transparent 2px, transparent 3px)}
 
   header{max-width:1000px;margin:32px auto 8px;padding:0 16px;display:flex;align-items:center;justify-content:space-between}
   .brand{display:flex;align-items:center;gap:12px}
-  .logo{height:48px;width:auto;filter:drop-shadow(0 0 8px rgba(16,229,128,.35));border-radius:6px}
+  .logo{height:48px;width:auto;filter:drop-shadow(0 0 8px var(--halo-strong));border-radius:6px}
   h1{font-size:22px;margin:0}
   .muted{color:var(--muted)}
 
   main{max-width:1000px;margin:0 auto;padding:0 16px 48px}
   .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
-  button{background:#0e1d17;border:1px solid var(--border);color:var(--fg);padding:10px 14px;border-radius:10px;cursor:pointer}
+  button{background:var(--button-bg);border:1px solid var(--border);color:var(--fg);padding:10px 14px;border-radius:10px;cursor:pointer}
   button:hover{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px}
-  .card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px;min-height:360px;box-shadow:0 0 0 1px rgba(16,229,128,.05)}
+  .card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px;min-height:360px;box-shadow:0 0 0 1px var(--halo-soft)}
   .row{display:flex;gap:8px;align-items:center}
-  input[type="text"], select{flex:1;background:#07140f;border:1px solid var(--border);color:var(--fg);padding:10px 12px;border-radius:10px;outline:none}
+  input[type="text"], select{flex:1;background:var(--input-bg);border:1px solid var(--border);color:var(--fg);padding:10px 12px;border-radius:10px;outline:none}
   input[type="text"]:focus, select:focus{border-color:var(--accent)}
   .word{font-size:24px;font-weight:700;min-height:30px}
-  .pill{font-size:12px;background:#0c1d17;border:1px solid var(--border);padding:2px 8px;border-radius:999px;color:var(--muted)}
+  .pill{font-size:12px;background:var(--pill-bg);border:1px solid var(--border);padding:2px 8px;border-radius:999px;color:var(--muted)}
   .controls{display:flex;gap:8px;flex-wrap:wrap}
   .small{padding:6px 9px;font-size:13px}
-  .sub{border:1px dashed rgba(16,229,128,.35);border-radius:12px;padding:10px}
-  .sub h4{margin:0 0 6px 0;font-size:13px;color:#b9f8db;letter-spacing:.3px}
-  .tag{font-size:11px;padding:2px 6px;border-radius:999px;border:1px solid rgba(16,229,128,.35);background:#08130f;color:#9beec9}
-  .hint{font-size:12px;color:#9bd4bd}
-  .close{position:absolute;top:8px;right:8px;line-height:1;border:1px solid var(--border);background:#07140f;border-radius:8px;padding:4px 8px;cursor:pointer;color:var(--fg);z-index:10;pointer-events:auto}
+  .sub{border:1px dashed var(--halo-strong);border-radius:12px;padding:10px}
+  .sub h4{margin:0 0 6px 0;font-size:13px;color:var(--biz-text);letter-spacing:.3px}
+  .tag{font-size:11px;padding:2px 6px;border-radius:999px;border:1px solid var(--halo-strong);background:var(--tag-bg);color:var(--tag-text)}
+  .hint{font-size:12px;color:var(--hint)}
+  .close{position:absolute;top:8px;right:8px;line-height:1;border:1px solid var(--border);background:var(--input-bg);border-radius:8px;padding:4px 8px;cursor:pointer;color:var(--fg);z-index:10;pointer-events:auto}
   .close:hover{border-color:var(--accent)}
   .badge{align-self:flex-start;padding:4px 10px;border-radius:999px;font-weight:600;border:1px solid}
-  .badge.business{background:var(--biz);border-color:var(--biz-br);color:#b9f8db}
+  .badge.business{background:var(--biz);border-color:var(--biz-br);color:var(--biz-text)}
   .badge.personal{background:var(--per);border-color:var(--per-br)}
-  .chooser{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;padding:16px;border:1px dashed rgba(16,229,128,.35);border-radius:12px;min-height:260px}
+  .chooser{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;padding:16px;border:1px dashed var(--halo-strong);border-radius:12px;min-height:260px}
   .choices{display:flex;gap:12px;flex-wrap:wrap}
   .typeBtn{display:inline-block;min-width:140px;font-size:16px;padding:12px 16px;border-radius:12px}
-  .typeBtn.business{background:rgba(16,229,128,.12);border:1px solid var(--accent);}
-  .typeBtn.business:hover{background:rgba(16,229,128,.18)}
-  .typeBtn.personal{background:rgba(181,83,208,.12);border:1px solid var(--per-br)}
-  .placeholder{flex:1;display:flex;justify-content:center;align-items:center;border:1px dashed #503050;border-radius:12px;min-height:240px}
-  .uc{font-size:14px;padding:8px 12px;border-radius:8px;border:1px solid #805080;background:#3a1d3a}
-  #testout{white-space:pre-wrap;background:#07140f;border:1px solid var(--border);padding:10px;border-radius:10px;display:none}
-  .ok{color:#8be28b} .fail{color:#ff8686}
+  .typeBtn.business{background:var(--business-btn-bg);border:1px solid var(--accent);}
+  .typeBtn.business:hover{background:var(--business-btn-hover)}
+  .typeBtn.personal{background:var(--personal-btn-bg);border:1px solid var(--per-br)}
+  .placeholder{flex:1;display:flex;justify-content:center;align-items:center;border:1px dashed var(--placeholder-border);border-radius:12px;min-height:240px}
+  .uc{font-size:14px;padding:8px 12px;border-radius:8px;border:1px solid var(--uc-border);background:var(--uc-bg)}
+  #testout{white-space:pre-wrap;background:var(--input-bg);border:1px solid var(--border);padding:10px;border-radius:10px;display:none}
+  .ok{color:var(--ok)} .fail{color:var(--fail)}
 
   /* Welcome overlay */
-  .welcome{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% -10%, rgba(16,229,128,.08), transparent 60%), var(--bg)}
+  .welcome{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% -10%, var(--halo-spot), transparent 60%), var(--bg)}
   .welcome.hidden{display:none}
-  .welcome-card{max-width:760px;margin:24px;border:1px solid var(--border);background:var(--card);border-radius:16px;padding:28px;text-align:center;box-shadow:0 0 0 1px rgba(16,229,128,.1), 0 12px 40px rgba(0,0,0,.45)}
-  .welcome .logo-big{height:96px;width:auto;filter:drop-shadow(0 0 10px rgba(16,229,128,.4));border-radius:10px}
+  .welcome-card{max-width:760px;margin:24px;border:1px solid var(--border);background:var(--card);border-radius:16px;padding:28px;text-align:center;box-shadow:0 0 0 1px var(--halo-mid), 0 12px 40px var(--shadow)}
+  .welcome .logo-big{height:96px;width:auto;filter:drop-shadow(0 0 10px var(--halo-glow));border-radius:10px}
   .welcome h2{margin:12px 0 6px}
   .welcome p{margin:0 0 16px;color:var(--muted)}
   .welcome-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-  .welcome button.primary{background:var(--accent);color:#062f1f;border-color:var(--accent-2)}
+  .welcome button.primary{background:var(--accent);color:var(--primary-on-accent);border-color:var(--accent-2)}
   .welcome .opt{display:flex;gap:8px;justify-content:center;align-items:center;color:var(--muted);font-size:13px;margin-top:8px}
-  .logo-fallback{display:inline-flex;align-items:center;justify-content:center;height:48px;min-width:48px;padding:6px 10px;background:linear-gradient(135deg, rgba(16,229,128,.25), rgba(16,229,128,.05));border:1px solid var(--accent);border-radius:6px;color:var(--fg);font-weight:700;letter-spacing:.5px}
+  .logo-fallback{display:inline-flex;align-items:center;justify-content:center;height:48px;min-width:48px;padding:6px 10px;background:linear-gradient(135deg, var(--logo-band), var(--halo-soft));border:1px solid var(--accent);border-radius:6px;color:var(--fg);font-weight:700;letter-spacing:.5px}
   .logo-fallback.big{height:96px;font-size:20px;border-radius:10px}
 </style>
 </head>
@@ -82,7 +107,7 @@
   <!-- Welcome Overlay -->
   <div id="welcome" class="welcome" role="dialog" aria-modal="true" aria-labelledby="wl-title">
     <div class="welcome-card">
-      <img class="logo-big" src="sandbox:/mnt/data/pokies_words_logo_data_uri.txt" alt="Logo" />
+      <img class="logo-big" src="logo.png" alt="Logo" />
       <h2 id="wl-title">Word Generator</h2>
       <p>Pick Business or Personal. Generate clean payment descriptions fast.</p>
       <div class="welcome-actions">
@@ -94,7 +119,7 @@
 
   <header>
     <div class="brand">
-      <img class="logo" src="sandbox:/mnt/data/pokies_words_logo_data_uri.txt" alt="Words Generator logo" />
+      <img class="logo" src="logo.png" alt="Words Generator logo" />
       <h1>Business / Personal Transfer Word Generators</h1>
     </div>
     <div class="muted">Pick Business or Personal per box. Business shows Incoming and Outgoing. Personal is under construction.</div>
