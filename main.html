@@ -209,7 +209,7 @@
 
     </div>
 
-    <div class="muted">Pick Business or Personal per box. Business shows Incoming and Outgoing. Personal is under construction.</div>
+    <div class="muted">Pick Business or Personal per box. Business shows Incoming and Outgoing. Personal is under Carpenter.</div>
 
   </header>
 
@@ -253,111 +253,19 @@
 
   const OUT_WORDS_BY_BUSINESS = {
 
-    // Keep for tests
+    // Focused list of trades with expense-only vocab
 
-    'Construction': ['Concrete services','Rebar','Aggregate','Formwork','Plant hire','Excavation','Scaffolding','Skip bin','Site prep','Reinforcement','Core drill','Saw cut','Set-out','Temporary fencing'],
+    'General': [],
 
+    'Carpenter': ['Timber supply','Sheet goods','Decking screws','Structural fasteners','Power tool hire','Blade replacements','Wood finishes','Dust extraction bags','Protective gear','Site cleanup skip','Vehicle fuel','Workshop rent'],
 
+    'Electrician': ['Copper cabling','Circuit breakers','Safety switches','Switchboard hardware','Test instrument calibration','Insulation tape bulk','Conduit fittings','Compliance certificates','Permit fees','Vehicle maintenance','PPE restock','Waste disposal'],
 
-    // Sole trader oriented
+    'Mobile Mechanic': ['Service kits','Engine oil stock','Filter inventory','Diagnostic software','Mobile hoist hire','Spare parts purchase','Tyre supply','Battery testing tools','Waste oil disposal','Fuel surcharge','Insurance premium','Vehicle registration'],
 
-    'Handyman': ['Call-out','Minor repairs','Hardware','Consumables','Sealant','Silicone','Caulking','Hang doors','Patch & paint','Flatpack assembly','TV mount','Small materials'],
+    'Graphic Designer': ['Design software subscription','Font licensing','Stock imagery credits','Printing proofs','Calibrated monitor service','Hardware upgrades','Cloud storage plan','Client presentation materials','Website hosting','Accounting services','Workspace rent','Professional insurance'],
 
-    'Electrician': ['Call-out','Switchboard','Circuit breaker','RCD','GPO outlet','Lighting','Downlights','Earthing','Conduit','Isolator','Test & tag','Compliance certificate','Smoke alarm','Data point'],
-
-    'Plumber': ['Call-out','Blocked drain','Jetting','CCTV drain','Water heater','Pipework','Fittings','Trap replacement','Leak detection','Toilet cistern','TMV test','Backflow test','Water meter'],
-
-    'Carpenter': ['Framing','Fix-out','Skirting','Architraves','Door jamb','Stud wall','Joists','Cladding','Decking','Timber supply','Fasteners','Hardware install'],
-
-    'Painter & Decorator': ['Preparation','Undercoat','Cutting-in','Rollers','Spray finish','Drop sheets','Masking','Colour match','Top coat','Scaffold hire','Touch-up'],
-
-    'Tiler': ['Tiles','Tile adhesive','Screed','Levelling compound','Grout','Grout sealer','Spacers','Waterproofing','Trim','Silicone'],
-
-    'Bricklayer': ['Bricks','Blocks','Mortar','Lintel','Cavity ties','Piers','Sand','Reinforcement','Pointing'],
-
-    'Plasterer': ['Plasterboard','Cornice','Setting compound','Top coat','Beads','Stopping','Sanding','Skim coat','Ceiling repair'],
-
-    'Roofer & Gutterer': ['Roof sheets','Ridge capping','Barge capping','Valley iron','Sarking','Battens','Downpipes','Gutters','Flashing','Leak repair','Gutter guard'],
-
-    'Gutter Cleaning': ['Roof access','Debris removal','Downpipe flush','Leaf guard','Safety gear'],
-
-    'Fencing Contractor': ['Posts','Post-mix','Panels','Palings','Colorbond','Rails','Gates','Hardware','Strainers','Concrete footings'],
-
-    'Flooring Installer': ['Floor prep','Underlay','Adhesive','Floating floor','Hybrid boards','Vinyl planks','Sanding','Polish','Trim & edging'],
-
-    'Glazier': ['Glass','Toughened','Laminated','Double glazed','Reglaze','Sealant','Putty','Beading','Site measure'],
-
-    'Locksmith': ['Call-out','Rekey','Deadbolt','Mortice lock','Cylinder','Transponder key','Key cut','Emergency open'],
-
-    'Pest Control': ['Inspection','Treatment','Bait stations','Termite barrier','Rodent control','Cockroach gel','Follow-up'],
-
-    'Landscaper & Gardener': ['Lawn mowing','Hedging','Edging','Mulch','Topsoil','Planting','Irrigation','Green waste','Pruning','Weed control'],
-
-    'Arborist / Tree Services': ['Tree removal','Pruning','Crown lift','Stump grind','Chipper hire','Arborist report','Traffic control','EWP hire'],
-
-    'Window Cleaning': ['Squeegee','Pure water system','Extension pole','Frame wipe','Internal windows','External windows'],
-
-    'Carpet Cleaning': ['Pre-spray','Hot-water extraction','Bonnet clean','Stain treatment','Urine treatment','Deodoriser','Sanitiser'],
-
-    'Pressure Washing': ['Surface cleaner','Detergent','Degreaser','Driveway clean','Facade wash','PSI test','Rinse down'],
-
-    'Pool Maintenance': ['Chemical balance','Chlorinator','pH adjust','Alkalinity','Shock dose','Filter media','Pump repair','Vacuum'],
-
-    'Waste / Rubbish Removal': ['Tip fees','Disposal','Sorting','Trailer hire','Labour','Load & go','Green waste'],
-
-    'Removalist': ['Truck hire','Two-man crew','Packing','Wrapping','Stairs surcharge','Transit insurance','Trolley'],
-
-    'Courier / Delivery': ['Consignment','Manifest','Fuel levy','Tolls','Run','Signature on delivery','Re-delivery'],
-
-    'Mobile Mechanic': ['Diagnostics','OBD scan','Service kit','Oil & filter','Brake pads','Timing belt','Spark plugs','Road test'],
-
-    'Auto Detailer / Car Wash': ['Detailing','Paint correction','Clay bar','Polish','Wax','Ceramic coat','Interior shampoo','Engine bay'],
-
-    'HVAC Technician': ['Split system','Ducting','Coil clean','Re-gas','Thermostat','Commissioning','Manometer test','Filter change'],
-
-    'Appliance Repair': ['Call-out','Diagnosis','PCB board','Heater element','Pump','Seal','Parts','Labour'],
-
-    'IT Support / Tech': ['Remote support','On-site','RMM','Antivirus','Patch management','Backups','Licences','Email setup'],
-
-    'Phone & Computer Repair': ['Screen replacement','Battery','Digitiser','Housing','Board repair','Data transfer','Case'],
-
-    'Web Designer / Developer': ['Discovery','Wireframes','Design','Build','CMS','Content load','SEO basics','Analytics','Hosting','Domain','Maintenance'],
-
-    'Graphic Designer': ['Brief','Concepts','Revisions','Artwork','Vector files','Raster files','Export pack','Licence'],
-
-    'Photographer / Videographer / Drone': ['Half-day','Full-day','Shoot','RAW files','Editing','Color grade','LUT','Travel km','Drone ops','Music licence'],
-
-    'DJ / Musician': ['Performance','Set list','Soundcheck','PA hire','Lighting','Setup','Travel','Overtime'],
-
-    'Copywriter / Social Media': ['Brief','Copy','Tone of voice','Content calendar','Scheduling','Hashtags','Reporting','Revisions'],
-
-    'Bookkeeper / BAS Agent': ['Bookkeeping','Bank feeds','Reconciliation','Payroll','Super','BAS lodgement','IAS','Xero/MYOB'],
-
-    'Personal Trainer': ['PT session','Block pack','Program','Body comp','Nutrition plan','Travel'],
-
-    'Massage Therapist': ['Remedial','Deep tissue','Relaxation','Oil','HICAPS','Receipt'],
-
-    'Hairdresser / Barber': ['Cut','Restyle','Blow-dry','Toner','Colour','Foils','Balayage','Consumables'],
-
-    'Beauty Therapist / Nails': ['Facial','Waxing','Tint','Lashes','Nails','Gel','SNS','Refill','Supplies'],
-
-    'Dog Walker / Pet Sitter / Groomer': ['Walk','Enrichment','Visit','Groom','Bath','Nail trim','Travel'],
-
-    'Childcare / Nanny': ['Care hours','School run','Activities','Meals','Supplies'],
-
-    'Aged Care Support': ['Support visit','Domestic assist','Shopping assist','Transport','Respite'],
-
-    'Mobile Barista / Food Truck / Catering': ['Coffee beans','Milk','Cups & lids','Gas','Site fee','Service','Generator fuel','Food cost'],
-
-    'Security Installer': ['Alarm panel','CCTV','NVR/DVR','PIR sensor','Reed switch','PoE cabling','Monitoring setup'],
-
-    'Solar Installer': ['Panels','Rails','Inverter','Micro-inverter','String','DC isolator','Commissioning','STC paperwork'],
-
-
-
-    // Fallback bucket for unknowns
-
-    'General': []
+    'Sex Worker': ['Personal protective supplies','Room rental fees','Laundry services','Security escort','Transportation costs','Marketing platform fees','Booking software','Health checkups','Therapy and wellbeing','Legal consultation','Insurance coverage','Safety equipment']
 
   };
 
@@ -591,7 +499,7 @@
 
     const ph = document.createElement('div'); ph.className='placeholder';
 
-    const uc = document.createElement('div'); uc.className='uc'; uc.textContent='Personal mode — under construction';
+    const uc = document.createElement('div'); uc.className='uc'; uc.textContent='Personal mode — under Carpenter';
 
     ph.append(uc);
 
@@ -901,11 +809,11 @@
 
     tryTest('generateInvoice holds format and increments', ()=>{ const g=newGen(); g.mode='business'; const fmt=pick(INVOICE_FORMATS); const start=startNumber(fmt); g.inv={fmtId:fmt.id,next:start}; const el=document.createElement('div'); generateInvoice(g,el); const fmtId=g.inv.fmtId; const n1=g.inv.next; const first=g.lastIn; generateInvoice(g,el); assert(g.inv.fmtId===fmtId,'fmt changed'); assert(g.inv.next===n1+1,'no +1'); assert(g.lastIn!==first,'text same'); });
 
-    tryTest('business tag count updates on bizType change', ()=>{ const g=newGen(); g.mode='business'; const el=card(g); const select=el.querySelector('select'); const tag=el.querySelectorAll('.tag')[0]; const before=tag.textContent; select.value='Construction'; select.dispatchEvent(new Event('change')); const after=tag.textContent; assert(before!==after,'tag unchanged'); });
+    tryTest('business tag count updates on bizType change', ()=>{ const g=newGen(); g.mode='business'; const el=card(g); const select=el.querySelector('select'); const tag=el.querySelectorAll('.tag')[0]; const before=tag.textContent; select.value='Carpenter'; select.dispatchEvent(new Event('change')); const after=tag.textContent; assert(before!==after,'tag unchanged'); });
 
     tryTest('removeGen removes exactly one item', ()=>{ const prev = gens.length; const g = newGen(); gens.push(g); write(gens); removeGen(g.id); if(gens.length !== prev){ throw new Error(`expected length ${prev} got ${gens.length}`); } });
 
-    tryTest('outgoing list mixes generic and business-specific', ()=>{ const list = getOutWordList('Construction'); if(!list.includes('Parking')) throw new Error('Parking missing'); if(!list.includes('Concrete services')) throw new Error('Concrete services missing'); const general = getOutWordList('General'); if(general.includes('Concrete services')) throw new Error('Construction word leaked into General'); });
+    tryTest('outgoing list mixes generic and business-specific', ()=>{ const list = getOutWordList('Carpenter'); if(!list.includes('Parking')) throw new Error('Parking missing'); if(!list.includes('Timber supply')) throw new Error('Timber supply missing'); const general = getOutWordList('General'); if(general.includes('Timber supply')) throw new Error('Carpenter word leaked into General'); });
 
 
 
